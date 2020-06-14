@@ -2,7 +2,7 @@ require "crobat/crobat_sdk"
 require "./runners/*"
 
 class ScansJob < Mosquito::QueuedJob
-    params(scan_id : String, domain : String, scan_type : String)
+    params(scan_id : Int64, domain : String, scan_type : String)
     
     def perform
       puts(domain)
@@ -18,13 +18,15 @@ class ScansJob < Mosquito::QueuedJob
 
     def passive_dns_scan(domain : String)
       puts("INFO - DNS Recon - Beginning passive DNS recon of #{domain}")
-      AmassRunner.run(domain, true)
+      amass_runner = AmassRunner.new(domain)
+      amass_runner.run(true)
       CrobatRunner.run(domain)
     end
 
     def active_dns_scan(domain : String)
       puts("INFO - DNS Recon - Beginning active DNS recon of #{domain}")
-      AmassRunner.run(domain, false)
+      amass_runner = AmassRunner.new(domain)
+      amass_runner.run(false)
     end
 
 end

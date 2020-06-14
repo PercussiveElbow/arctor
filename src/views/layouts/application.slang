@@ -15,7 +15,8 @@ html
     nav.navbar.navbar-expand.navbar-dark.bg-primary.mb-3
       .container
         a.navbar-brand href="/"
-          img src="/dist/images/logo.svg" height="30" alt="Amber logo"
+          img src="/dist/images/logo.png" alt="Arctor" object-fit="fill"
+          
         ul.navbar-nav.mr-auto
           == render(partial: "layouts/_nav.slang")
         ul.navbar-nav
