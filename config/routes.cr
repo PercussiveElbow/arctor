@@ -33,6 +33,8 @@ Amber::Server.configure do
     post "/scans", ScansController, :start
     get "/domains/", DomainsController, :index
     get "/domains/:domain", DomainsController, :get
+    get "/domains/:domain/subdomain/:subdomain", SubDomainsController, :get
+
   end
 
   routes :api do

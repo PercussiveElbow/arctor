@@ -30,7 +30,6 @@ class AmassRunner < GenericRunner
       if passive
         puts("INFO - DNS Recon - Amass - Beginning PASSIVE scan  of #{@domain}")
         args = ["enum", "-passive", "-d", "#{@domain}"]
-        puts(args)
       else
         puts("INFO - DNS Recon - Amass - Beginning ACTIVE scan  of #{@domain}")
         args = ["enum", "-active", "-d", "#{@domain}", "-ip", "-json", "#{filename}"]
@@ -69,9 +68,14 @@ class AmassRunner < GenericRunner
       else
         domain_id = db_domain_found.id
       end
+
       puts("INFO - DNS Recon - Amass - Loaded subdomain #{subdomain} into database")
       subdomain = SubDomain.create(domain_id: domain_id, fqdn: subdomain, a: ipv4, aaaa: ipv6, source: source)
       subdomain.save
+      host = Host.create(ipv6: ipv6, ipv4: ipv4)
+      host.save
+      link = SubDomainHostLink.create(host_id: host.id, sub_domain_id: subdomain.id)
+      link.save
     end
 
     def parse_file(filename : String)
@@ -83,16 +87,18 @@ class AmassRunner < GenericRunner
         content = content.split("}{") # amass doesn't actually output valid JSON because ?????????
         
         content.each do |json_chunk|
-          if !(json_chunk[0] == '{')
-              json_chunk = "{#{json_chunk}"
+          if json_chunk
+            if !(json_chunk[0] == '{')
+                json_chunk = "{#{json_chunk}"
+            end
+            if json_chunk[json_chunk.size()-1] != '}'
+                json_chunk = "#{json_chunk}}"
+            end
+            parsed_sub = AmassJson.from_json(json_chunk)
+            # puts(parsed_sub)
+            # puts(parsed_sub.source)
+            insert_subdomain(parsed_sub.name,parsed_sub.addresses[0].ip,parsed_sub.addresses[0].ip, parsed_sub.source)
           end
-          if json_chunk[json_chunk.size()-1] != '}'
-              json_chunk = "#{json_chunk}}"
-          end
-          parsed_sub = AmassJson.from_json(json_chunk)
-          # puts(parsed_sub)
-          # puts(parsed_sub.source)
-          insert_subdomain(parsed_sub.name,parsed_sub.addresses[0].ip,parsed_sub.addresses[0].ip, parsed_sub.source)
         end
       end
 

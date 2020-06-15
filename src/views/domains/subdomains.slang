@@ -11,7 +11,8 @@ table
         th Recon source
     - subdomains.each do |subdomain|
         tr
-           td = subdomain.fqdn
+           td 
+                a href="./subdomain/#{subdomain.fqdn}/" subdomain.fqdn
            td = subdomain.a
            td = subdomain.aaaa
            td = subdomain.mx
