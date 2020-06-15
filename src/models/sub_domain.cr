@@ -9,5 +9,6 @@ class SubDomain < Granite::Base
   column ns : String?
   column mx : String?
   column txt : String?
+  column source : String?
   timestamps
 end

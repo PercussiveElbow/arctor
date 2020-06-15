@@ -7,6 +7,7 @@ CREATE TABLE sub_domains (
   ns VARCHAR,
   mx VARCHAR,
   txt VARCHAR,
+  source VARCHAR,
   created_at TIMESTAMP,
   updated_at TIMESTAMP,
   domain_id BIGSERIAL NOT NULL,

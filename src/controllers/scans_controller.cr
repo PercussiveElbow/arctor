@@ -2,18 +2,23 @@ require "../jobs/scans_job"
 
 class ScansController < ApplicationController
     def index
-      render("index.slang")
+      scans = Scan.all
+      render("scans.slang")
     end
 
     def start
+      puts(params)
       if params[:domain]
         domain = params[:domain]
+        scan_type = "passive"
+
+        if params && params.to_unsafe_h.has_key?("active")
+          scan_type = "active"
+        end
 
         this_scan = Scan.create(status: "Created")
         this_scan.save
-
         this_scan_id = this_scan.id
-
         if this_scan_id
           db_domain_found = Domain.find_by(fqdn: domain)
 
@@ -24,13 +29,11 @@ class ScansController < ApplicationController
           else
             puts("Existing domain #{domain} found in DB")
           end
-
-
           puts("Starting scan job")
-          ScansJob.new(scan_id: this_scan_id, domain: domain, scan_type: "passive").enqueue
+          ScansJob.new(scan_id: this_scan_id, domain: domain, scan_type: scan_type).enqueue
         end
       end
-      render("index.slang") 
+      #render("scans.slang") 
     end
 
 end  

@@ -30,7 +30,9 @@ Amber::Server.configure do
   routes :web do
     get "/", HomeController, :index
     get "/scans", ScansController, :index
-    get "/scans/:domain", ScansController, :start
+    post "/scans", ScansController, :start
+    get "/domains/", DomainsController, :index
+    get "/domains/:domain", DomainsController, :get
   end
 
   routes :api do

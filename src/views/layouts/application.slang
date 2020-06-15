@@ -9,7 +9,9 @@ html
     link rel="apple-touch-icon" href="/favicon.png"
     link rel="icon" href="/favicon.png"
     link rel="icon" type="image/x-icon" href="/favicon.ico"
-    link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/picnic"
+    link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic"
+    link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"
+    link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css"
 
   body
     nav.navbar.navbar-expand.navbar-dark.bg-primary.mb-3
