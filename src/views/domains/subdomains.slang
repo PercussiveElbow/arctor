@@ -12,7 +12,7 @@ table
     - subdomains.each do |subdomain|
         tr
            td 
-                a href="./subdomain/#{subdomain.fqdn}/" subdomain.fqdn
+                a href="./subdomain/#{subdomain.fqdn}/" #{subdomain.fqdn}
            td = subdomain.a
            td = subdomain.aaaa
            td = subdomain.mx

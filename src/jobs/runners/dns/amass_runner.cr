@@ -1,6 +1,7 @@
-require "./generic_runner"
 require "random"
 require "json"
+require "../generic_runner"
+require "../../shodan_enum_job"
 
 class AmassRunner < GenericRunner
 
@@ -19,7 +20,7 @@ class AmassRunner < GenericRunner
       property asn : Int64? 
     end
 
-    def initialize(@domain : String)
+    def initialize(@domain : String, @domain_id : Int64)
     end
 
     def run(passive : Bool)
@@ -61,21 +62,13 @@ class AmassRunner < GenericRunner
     def insert_subdomain(subdomain : String, ipv4 = "", ipv6 : String = "", source : String = "")
       db_domain_found = Domain.find_by(fqdn: @domain)
 
-      if !db_domain_found
-        new_domain = Domain.create(fqdn: @domain)
-        new_domain.save
-        domain_id = new_domain.id
-      else
-        domain_id = db_domain_found.id
-      end
-
       puts("INFO - DNS Recon - Amass - Loaded subdomain #{subdomain} into database")
-      subdomain = SubDomain.create(domain_id: domain_id, fqdn: subdomain, a: ipv4, aaaa: ipv6, source: source)
-      subdomain.save
+      subdomain = SubDomain.create(domain_id: @domain_id, fqdn: subdomain, a: ipv4, aaaa: ipv6, source: source)
       host = Host.create(ipv6: ipv6, ipv4: ipv4)
-      host.save
+      if ipv4 && ipv4.size() > 0
+        ShodanEnumJob.new(scan_id: 1, host: ipv4, scan_type: "passive").enqueue
+      end
       link = SubDomainHostLink.create(host_id: host.id, sub_domain_id: subdomain.id)
-      link.save
     end
 
     def parse_file(filename : String)

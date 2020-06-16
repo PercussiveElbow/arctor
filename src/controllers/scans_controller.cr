@@ -1,4 +1,4 @@
-require "../jobs/scans_job"
+require "../jobs/dns_enum_job"
 
 class ScansController < ApplicationController
     def index
@@ -17,20 +17,23 @@ class ScansController < ApplicationController
         end
 
         this_scan = Scan.create(status: "Created")
-        this_scan.save
         this_scan_id = this_scan.id
         if this_scan_id
           db_domain_found = Domain.find_by(fqdn: domain)
-
           if !db_domain_found
             puts("Creating new domain in DB #{domain}")
             new_domain = Domain.create(fqdn: domain)
-            new_domain.save
+            if new_domain
+              domain_id = new_domain.id
+            end
           else
+            domain_id = db_domain_found.id
             puts("Existing domain #{domain} found in DB")
           end
-          puts("Starting scan job")
-          ScansJob.new(scan_id: this_scan_id, domain: domain, scan_type: scan_type).enqueue
+          puts("INFO - Queueing #{scan_type} DNS enumeration job.")
+          if domain_id 
+            DNSEnumJob.new(scan_id: this_scan_id, domain: domain, domain_id: domain_id, scan_type: scan_type).enqueue
+          end
         end
       end
       #render("scans.slang") 

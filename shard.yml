@@ -2,11 +2,11 @@ name: arctor
 version: 0.1.0
 
 authors:
-  - your-name-here <your-email-here>
+  - mil0sec
 
 crystal: 0.35.0
 
-license: UNLICENSED
+license: MIT
 
 targets:
   arctor:
@@ -31,21 +31,20 @@ dependencies:
   pg:
      github: will/crystal-pg
      version: ~> 0.21.1
-  mysql:
-    github: crystal-lang/crystal-mysql
-    version: ~> 0.11.1
 
   mosquito:
     github: robacarp/mosquito
     branch: master
 
-  sidekiq:
-    github: PercussiveElbow/sidekiq.cr
-    branch: master
-
   crobat:
     github: percussiveelbow/crobat-sdk-crystal
-    
+  
+  shodan:
+    github: percussiveelbow/ShodanCrystalAPI
+
+  dns:
+      gitlab: jgillich/crystal-dns
+
 development_dependencies:
   garnet_spec:
     github: amberframework/garnet-spec

@@ -1,4 +1,3 @@
-require "../jobs/scans_job"
 
 class SubDomainsController < ApplicationController
     
