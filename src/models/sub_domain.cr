@@ -6,8 +6,8 @@ class SubDomain < Granite::Base
   has_many :hosts, class_name: Host, through: :sub_domain_host_link
   column id : Int64, primary: true
   column fqdn : String?
-  column a : String?
-  column aaaa : String?
+  column a : Array(String)?
+  column aaaa : Array(String)?
   column ns : String?
   column mx : String?
   column txt : String?

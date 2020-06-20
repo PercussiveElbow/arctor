@@ -9,3 +9,4 @@ table
                 a href="#{domain.fqdn}/" #{domain.fqdn} 
             td 
                 = domain.subdomains.size() 
+                

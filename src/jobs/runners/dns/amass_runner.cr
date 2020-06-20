@@ -1,5 +1,6 @@
 require "random"
 require "json"
+require "./dns_inserter_runner"
 require "../generic_runner"
 require "../../shodan_enum_job"
 
@@ -54,21 +55,10 @@ class AmassRunner < GenericRunner
 
     def parse_stdout(stdout : String)
       output_split = stdout.split("\n")
-      output_split.each do | line | 
-        insert_subdomain(line)
+      output_split.each do | line |
+        puts(line)
+        DNSInserter.insert_subdomain(domain_id: @domain_id, subdomain: line, source: "Amass")
       end
-    end
-
-    def insert_subdomain(subdomain : String, ipv4 = "", ipv6 : String = "", source : String = "")
-      db_domain_found = Domain.find_by(fqdn: @domain)
-
-      puts("INFO - DNS Recon - Amass - Loaded subdomain #{subdomain} into database")
-      subdomain = SubDomain.create(domain_id: @domain_id, fqdn: subdomain, a: ipv4, aaaa: ipv6, source: source)
-      host = Host.create(ipv6: ipv6, ipv4: ipv4)
-      if ipv4 && ipv4.size() > 0
-        ShodanEnumJob.new(scan_id: 1, host: ipv4, scan_type: "passive").enqueue
-      end
-      link = SubDomainHostLink.create(host_id: host.id, sub_domain_id: subdomain.id)
     end
 
     def parse_file(filename : String)
@@ -88,9 +78,22 @@ class AmassRunner < GenericRunner
                 json_chunk = "#{json_chunk}}"
             end
             parsed_sub = AmassJson.from_json(json_chunk)
-            # puts(parsed_sub)
-            # puts(parsed_sub.source)
-            insert_subdomain(parsed_sub.name,parsed_sub.addresses[0].ip,parsed_sub.addresses[0].ip, parsed_sub.source)
+            ip = parsed_sub.addresses[0].ip 
+
+            ipv4 = ""
+            ipv6 = ""
+
+            if ip =~ /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/
+              puts("Found Ipv4 #{ip}")
+              ipv4 = ip
+              DNSInserter.insert_subdomain(domain_id: @domain_id, subdomain: parsed_sub.name,ipv4: [ipv4], source: parsed_sub.source)
+            elsif ip =~ /(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))/
+              puts("Found Ipv6 #{ip}")
+              ipv6 = ip
+              DNSInserter.insert_subdomain(domain_id: @domain_id, subdomain: parsed_sub.name,ipv4: [ipv4], ipv6: [ipv6], source: parsed_sub.source)
+            end
+
+              DNSInserter.insert_subdomain(domain_id: @domain_id, subdomain: parsed_sub.name, ipv6: [ipv6], source: parsed_sub.source)
           end
         end
       end

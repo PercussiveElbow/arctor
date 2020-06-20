@@ -3,11 +3,13 @@ require "../jobs/dns_enum_job"
 class ScansController < ApplicationController
     def index
       scans = Scan.all
+      scan_created = false
       render("scans.slang")
     end
 
     def start
-      puts(params)
+      scan_created = false
+
       if params[:domain]
         domain = params[:domain]
         scan_type = "passive"
@@ -33,10 +35,12 @@ class ScansController < ApplicationController
           puts("INFO - Queueing #{scan_type} DNS enumeration job.")
           if domain_id 
             DNSEnumJob.new(scan_id: this_scan_id, domain: domain, domain_id: domain_id, scan_type: scan_type).enqueue
+            scan_created = true
           end
         end
       end
-      #render("scans.slang") 
+      scans = Scan.all
+      render("scans.slang") 
     end
 
 end  

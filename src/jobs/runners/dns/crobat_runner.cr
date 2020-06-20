@@ -1,4 +1,5 @@
 require "../generic_runner"
+require "./dns_inserter_runner"
 require "crobat/crobat_sdk"
 require "dns"
 
@@ -30,10 +31,13 @@ class CrobatRunner
         response = resolver.query(subdomain, DNS::RecordType::A)
         response.answers.each do |answer|
           puts "got ipv4 address #{answer.data}"
+          DNSInserter.insert_subdomain(domain_id: @domain_id, subdomain: subdomain, ipv4: [answer.data.to_s],source: "Crobat")
+
         end
         response = resolver.query(subdomain, DNS::RecordType::AAAA)
         response.answers.each do |answer|
           puts "got ipv6 address #{answer.data}"
+          DNSInserter.insert_subdomain(domain_id: @domain_id , subdomain: subdomain, ipv6: [answer.data.to_s], source: "Crobat")
         end
       rescue IO::TimeoutError
 

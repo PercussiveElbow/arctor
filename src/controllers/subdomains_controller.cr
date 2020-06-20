@@ -9,7 +9,7 @@ class SubDomainsController < ApplicationController
           hosts = subdomain.hosts
 
 
-          render("subdomains.slang")
+          render("subdomain.slang")
         end
       end
     end

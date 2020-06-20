@@ -18,7 +18,7 @@ class DNSEnumJob < Mosquito::QueuedJob
       puts("INFO - DNS Recon - Beginning passive DNS recon of #{domain}")
       crobat_runner = CrobatRunner.new(domain,domain_id)
       crobat_runner.run()
-      # amass_runner = AmassRunner.new(domain)
+      # amass_runner = AmassRunner.new(domain,domain_id)
       # amass_runner.run(true)
     end
 

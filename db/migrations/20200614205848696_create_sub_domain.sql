@@ -2,8 +2,8 @@
 CREATE TABLE sub_domains (
   id BIGSERIAL PRIMARY KEY,
   fqdn VARCHAR,
-  a VARCHAR,
-  aaaa VARCHAR,
+  a TEXT[],
+  aaaa TEXT[],
   ns VARCHAR,
   mx VARCHAR,
   txt VARCHAR,
