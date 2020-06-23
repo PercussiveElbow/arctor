@@ -45,6 +45,9 @@ dependencies:
   dns:
       gitlab: jgillich/crystal-dns
 
+  redis:
+    github: stefanwille/crystal-redis
+
 development_dependencies:
   garnet_spec:
     github: amberframework/garnet-spec

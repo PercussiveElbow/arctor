@@ -16,35 +16,7 @@ class CrobatRunner
     subdomains.each do | subdomain | 
       puts(subdomain)
     end
-    subdomains_with_ips = resolve_subdomain(subdomains)
-  end
-  
-  
-  def resolve_subdomain(subdomains : Array(String))
-    subdomains_with_ips = [] of Array(String)
-    resolver = DNS::Resolver.new
-
-
-    subdomains.each do | subdomain |
-      begin
-        puts("Resolving #{subdomain}")
-        response = resolver.query(subdomain, DNS::RecordType::A)
-        response.answers.each do |answer|
-          puts "got ipv4 address #{answer.data}"
-          DNSInserter.insert_subdomain(domain_id: @domain_id, subdomain: subdomain, ipv4: [answer.data.to_s],source: "Crobat")
-
-        end
-        response = resolver.query(subdomain, DNS::RecordType::AAAA)
-        response.answers.each do |answer|
-          puts "got ipv6 address #{answer.data}"
-          DNSInserter.insert_subdomain(domain_id: @domain_id , subdomain: subdomain, ipv6: [answer.data.to_s], source: "Crobat")
-        end
-      rescue IO::TimeoutError
-
-      end
-    end
-    resolver.close
-    subdomains_with_ips
+    subdomains_with_ips = DNSInserter.resolve_subdomain(domain_id,subdomains,"Crobat")
   end
   
 end

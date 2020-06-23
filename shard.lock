@@ -78,7 +78,7 @@ shards:
 
   mysql:
     git: https://github.com/crystal-lang/crystal-mysql.git
-    version: 0.11.1
+    version: 0.11.2
 
   optarg:
     git: https://github.com/amberframework/optarg.git
@@ -110,7 +110,7 @@ shards:
 
   shodan:
     git: https://github.com/percussiveelbow/ShodanCrystalAPI.git
-    version: 0.1.1+git.commit.3ef41d725ecbe6fa978067385bcde6b32e689bd9
+    version: 0.1.1+git.commit.2c487527b0da03bda01ccb3d47f0592de5cf7cb2
 
   slang:
     git: https://github.com/jeromegn/slang.git

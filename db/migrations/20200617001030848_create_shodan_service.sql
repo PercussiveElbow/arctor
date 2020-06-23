@@ -12,7 +12,7 @@ CREATE TABLE shodan_services (
   hostnames TEXT[],
   cpes TEXT[],
   port INTEGER,
-  hash FLOAT,
+  hash bigint,
   FOREIGN KEY (shodan_info_id) REFERENCES shodan_infos(id),
   created_at TIMESTAMP,
   updated_at TIMESTAMP

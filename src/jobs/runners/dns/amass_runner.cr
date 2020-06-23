@@ -55,10 +55,7 @@ class AmassRunner < GenericRunner
 
     def parse_stdout(stdout : String)
       output_split = stdout.split("\n")
-      output_split.each do | line |
-        puts(line)
-        DNSInserter.insert_subdomain(domain_id: @domain_id, subdomain: line, source: "Amass")
-      end
+      DNSInserter.resolve_subdomain(@domain_id,output_split,"Amass Passive")
     end
 
     def parse_file(filename : String)
@@ -82,7 +79,6 @@ class AmassRunner < GenericRunner
 
             ipv4 = ""
             ipv6 = ""
-
             if ip =~ /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/
               puts("Found Ipv4 #{ip}")
               ipv4 = ip
@@ -92,8 +88,6 @@ class AmassRunner < GenericRunner
               ipv6 = ip
               DNSInserter.insert_subdomain(domain_id: @domain_id, subdomain: parsed_sub.name,ipv4: [ipv4], ipv6: [ipv6], source: parsed_sub.source)
             end
-
-              DNSInserter.insert_subdomain(domain_id: @domain_id, subdomain: parsed_sub.name, ipv6: [ipv6], source: parsed_sub.source)
           end
         end
       end

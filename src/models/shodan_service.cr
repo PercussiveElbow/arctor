@@ -13,6 +13,6 @@ class ShodanService < Granite::Base
   column cpes : Array(String)?
   column product : String?
   column port : Int32? 
-  column hash : Float64?
+  column hash : Int64?
   timestamps
 end

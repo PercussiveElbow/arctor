@@ -78,4 +78,31 @@ class DNSInserter
         end
         raise Exception.new("Unable to insert subdomain #{subdomain}")
     end
+
+    def self.resolve_subdomain(domain_id, subdomains : Array(String),source)
+        subdomains_with_ips = [] of Array(String)
+        resolver = DNS::Resolver.new
+    
+    
+        subdomains.each do | subdomain |
+          begin
+            puts("Resolving #{subdomain}")
+            response = resolver.query(subdomain, DNS::RecordType::A)
+            response.answers.each do |answer|
+              puts "got ipv4 address #{answer.data}"
+              self.insert_subdomain(domain_id: domain_id, subdomain: subdomain, ipv4: [answer.data.to_s],source: source)
+    
+            end
+            response = resolver.query(subdomain, DNS::RecordType::AAAA)
+            response.answers.each do |answer|
+              puts "got ipv6 address #{answer.data}"
+              self.insert_subdomain(domain_id: domain_id , subdomain: subdomain, ipv6: [answer.data.to_s], source: source)
+            end
+          rescue IO::TimeoutError
+    
+          end
+        end
+        resolver.close
+        subdomains_with_ips
+      end
 end

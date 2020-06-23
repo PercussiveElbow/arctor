@@ -7,13 +7,15 @@ class ShodanRunner < GenericRunner
 
     def run(passive : Bool)
       puts("INFO - DNS Recon - Amass - Beginning Shodan recon of #{@host}")
-      shodan_api = Shodan::Client.new("keykeykeykeykeykey")
+      shodan_api = Shodan::Client.new("keykeykeykey")
 
       begin
         host_info = shodan_api.host(@host)
         if host_info
           insert_host_data(host_info)
         end
+      rescue ex : Shodan::Client::ShodanHostNotfoundException
+        puts(ex)
       rescue ex : Shodan::Client::ShodanAPIException
         puts(ex)
       end      
@@ -21,7 +23,6 @@ class ShodanRunner < GenericRunner
     end
 
     def insert_host_data(host_info : Shodan::Host) # very messy need a  better method, maybe macro or figure out a way to base db model off existing serializable shodan obj
-      puts(host_info.instance_vars_names)
       ports = host_info.ports
       domains = host_info.domains
       hostnames = host_info.hostnames
@@ -36,7 +37,9 @@ class ShodanRunner < GenericRunner
       datas = host_info.data
       if new_shodan_entry_id && datas
         datas.each do | data |
-          ShodanService.create(shodan_info_id: new_shodan_entry_id, port: data.port, product: data.product, isp: data.isp, asn: data.asn, hostnames: data.hostnames, domains: data.domains, os: data.os, hash: data.hash, version: data.version, cpes: data.cpe)
+          ShodanService.create!(shodan_info_id: new_shodan_entry_id, port: data.port, 
+          product: data.product, isp: data.isp, asn: data.asn, hostnames: data.hostnames, 
+          domains: data.domains, os: data.os, hash: data.hash, version: data.version, cpes: data.cpe)
         end
       end
     end
