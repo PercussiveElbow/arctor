@@ -5,3 +5,5 @@ li
   a href="/scans/" Scans
 li 
   a href="/status/" Status
+li 
+  a href="/settings" Settings

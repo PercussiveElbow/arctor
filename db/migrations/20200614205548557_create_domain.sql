@@ -4,6 +4,8 @@ CREATE TABLE domains (
   fqdn VARCHAR,
   created_at TIMESTAMP,
   updated_at TIMESTAMP
+  -- scan_id BIGSERIAL NOT NULL,
+  -- FOREIGN KEY (scan_id) REFERENCES scans(id)
 );
 
 

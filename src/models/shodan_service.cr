@@ -2,6 +2,7 @@ class ShodanService < Granite::Base
   connection pg
   table shodan_services
   belongs_to :shodan_info
+  has_one  :shodan_http_service, class_name: ShodanServiceHTTP 
   column id : Int64, primary: true
   column isp : String?
   column asn : String?

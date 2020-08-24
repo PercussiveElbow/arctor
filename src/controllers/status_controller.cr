@@ -4,12 +4,9 @@ require "redis"
 
 class StatusController < ApplicationController
     def index
-        puts("redis")
         redis = Redis.new
-        keys = redis.keys("*")
-
-        #keys = redis.get("mosquito:pending:dns_enum_job*")
-        puts(keys)
+        tasks = redis.keys("mosquito:task:*")
+        pendings = redis.keys("mosquito:pending:*")
 
         render("status.slang")
     end

@@ -21,7 +21,8 @@ class AmassRunner < GenericRunner
       property asn : Int64? 
     end
 
-    def initialize(@domain : String, @domain_id : Int64)
+    def initialize(@scan_id : Int64, @domain : String, @domain_id : Int64)
+      @dns_inserter = DNSInserter.new(@scan_id, @domain_id)
     end
 
     def run(passive : Bool)
@@ -55,7 +56,7 @@ class AmassRunner < GenericRunner
 
     def parse_stdout(stdout : String)
       output_split = stdout.split("\n")
-      DNSInserter.resolve_subdomain(@domain_id,output_split,"Amass Passive")
+      @dns_inserter.resolve_and_insert_subdomains(output_split,"Amass Passive")
     end
 
     def parse_file(filename : String)
@@ -82,11 +83,11 @@ class AmassRunner < GenericRunner
             if ip =~ /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/
               puts("Found Ipv4 #{ip}")
               ipv4 = ip
-              DNSInserter.insert_subdomain(domain_id: @domain_id, subdomain: parsed_sub.name,ipv4: [ipv4], source: parsed_sub.source)
+              @dns_inserter.insert_subdomain_with_host_data(subdomain: parsed_sub.name,ipv4: [ipv4], source: parsed_sub.source)
             elsif ip =~ /(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))/
               puts("Found Ipv6 #{ip}")
               ipv6 = ip
-              DNSInserter.insert_subdomain(domain_id: @domain_id, subdomain: parsed_sub.name,ipv4: [ipv4], ipv6: [ipv6], source: parsed_sub.source)
+              @dns_inserter.insert_subdomain_with_host_data(subdomain: parsed_sub.name,ipv4: [ipv4], ipv6: [ipv6], source: parsed_sub.source)
             end
           end
         end

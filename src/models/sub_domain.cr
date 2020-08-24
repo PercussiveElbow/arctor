@@ -5,6 +5,7 @@ class SubDomain < Granite::Base
   has_many :sub_domain_host_link, class_name: SubDomainHostLink
   has_many :hosts, class_name: Host, through: :sub_domain_host_link
   column id : Int64, primary: true
+  column hijackable : Bool?
   column fqdn : String?
   column a : Array(String)?
   column aaaa : Array(String)?

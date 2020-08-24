@@ -3,9 +3,14 @@ h1 Status
 h3 Redis Queue
 table
     tr
-        th key 
-    - if keys
-        - keys.each do | key |
+        th Tasks 
+    - if tasks
+        - tasks.each do | task |
             tr
-                th =key
+                td = task
+        th Pending
+    - if pendings
+        - pendings.each do | pending |
+            tr
+                td = pending
 

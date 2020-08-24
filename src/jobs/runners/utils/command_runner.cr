@@ -1,9 +1,14 @@
 class CommandRunner
 
-    def self.run(cmd, args)
+    def self.run(cmd, args, stdin = "")
       stdout = IO::Memory.new
       stderr = IO::Memory.new
-      status = Process.run(cmd, args: args, output: stdout, error: stderr)
+      if stdin && stdin.size() > 0
+        stdin = IO::Memory.new(stdin)
+        status = Process.run(cmd, args: args, output: stdout, error: stderr,input: stdin)
+      else
+        status = Process.run(cmd, args: args, output: stdout, error: stderr)
+      end
       if status.success?
         {status.exit_code, stdout.to_s}
       else

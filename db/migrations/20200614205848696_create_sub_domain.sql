@@ -7,6 +7,7 @@ CREATE TABLE sub_domains (
   ns VARCHAR,
   mx VARCHAR,
   txt VARCHAR,
+  hijackable BOOLEAN,
   source VARCHAR,
   created_at TIMESTAMP,
   updated_at TIMESTAMP,

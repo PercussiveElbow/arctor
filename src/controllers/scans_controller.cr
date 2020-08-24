@@ -9,16 +9,21 @@ class ScansController < ApplicationController
 
     def start
       scan_created = false
+      stages = [] of String
 
-      if params[:domain]
+      if params && params[:domain]
         domain = params[:domain]
         scan_type = "passive"
 
-        if params && params.to_unsafe_h.has_key?("active")
-          scan_type = "active"
+        accepted_stages = ["dns_passive","dns_active","shodan","subjack","pushover","portscan","flyover"]
+        params_hash = params.to_unsafe_h
+        params_hash.keys().each do |key|
+          if accepted_stages.includes?(key)
+            stages << key
+          end
         end
-
-        this_scan = Scan.create(status: "Created")
+        
+        this_scan = Scan.create(scan_status: "Created", stages: stages,target_query: domain)
         this_scan_id = this_scan.id
         if this_scan_id
           db_domain_found = Domain.find_by(fqdn: domain)
@@ -32,6 +37,7 @@ class ScansController < ApplicationController
             domain_id = db_domain_found.id
             puts("Existing domain #{domain} found in DB")
           end
+
           puts("INFO - Queueing #{scan_type} DNS enumeration job.")
           if domain_id 
             DNSEnumJob.new(scan_id: this_scan_id, domain: domain, domain_id: domain_id, scan_type: scan_type).enqueue

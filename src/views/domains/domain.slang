@@ -67,6 +67,7 @@ h3 Subdomains of
     table 
         tr
             th Subdomain
+            th Hijackable
             th A 
             th AAAA 
             th MX
@@ -76,6 +77,7 @@ h3 Subdomains of
             tr
             td 
                 a href="./subdomain/#{subdomain.fqdn}/" #{subdomain.fqdn}
+            td = subdomain.hijackable
             td
                 - a_records = subdomain.a
                 - if a_records
@@ -109,7 +111,7 @@ javascript:
         container: document.getElementById('cyto'),
         elements: #{elements},
         viewport: { zoom:1},
-        layout: { name: 'spread',minDist: 500, fit:true},
+        layout: { name: 'concentric',minDist: 500,   minNodeSpacing: 50, padding: 200, expandingFactor: -1.0,maxExpandIterations: 4,fit:true},
         style: [
         {
             selector: 'node',
@@ -119,6 +121,9 @@ javascript:
                 label: 'data(id)'
             }
         }]
+    });
+    cy.on('tap', 'node', function (evt) {
+         console.log(evt.target.id())
     });
     };
 

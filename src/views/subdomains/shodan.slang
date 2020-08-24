@@ -13,10 +13,10 @@
 
         tr 
             th Operating System
-            th = shodan.os
+            td = shodan.os
         tr 
             th Tags
-            th 
+            td 
                 ul.tags
                     - tags = shodan.tags
                     - if tags 
@@ -24,15 +24,15 @@
                             li.tag.tag-rounded = tag
         tr
             th Last seen
-            th = shodan.last_update
+            td = shodan.last_update
     h6 Hostnames
     table
         tr 
             th Organisation
-            th = shodan.org 
+            td = shodan.org 
         tr
             th Domains
-            th 
+            td 
                 ul.tags
                     - domains = shodan.domains
                     - if domains 
@@ -40,7 +40,7 @@
                             li.tag.tag-rounded = domain
         tr 
             th Hostnames 
-            th 
+            td 
                 ul.tags
                     - hostnames = shodan.hostnames
                     - if hostnames 
@@ -50,40 +50,66 @@
     table
         tr
             th Country
-            th = shodan.country_name
+            td = shodan.country_name
         tr
             th City
-            th = shodan.city
+            td = shodan.city
         tr
             th Postal Code
-            th = shodan.postal_code
+            td = shodan.postal_code
         tr
             th Latitude
-            th = shodan.latitude
+            td = shodan.latitude
         tr
             th Longitude
-            th = shodan.longitude
+            td = shodan.longitude
     h6 Services
     .row
         - services = shodan.shodan_services
         - services.each do | service |
-                .col.col-lg-6
+                .col.col-lg-12
                     .card 
                         h6 Port 
                             = service.port
                         table 
                             tr
                                 th Product 
-                                th = service.product 
+                                td = service.product 
                             tr
                                 th Version 
-                                th = service.version 
+                                td = service.version 
                             tr
                                 th CPE
-                                th = service.cpes
+                                td = service.cpes
                             tr 
                                 th Banner
-                                th = service.banner 
+                                td = service.banner 
                             tr
                                 th OS 
-                                th = service.os
+                                td = service.os
+                            - http = service.shodan_http_service
+                        - if http 
+                            .card
+                                h6 HTTP Service
+                                table
+                                    tr
+                                        th Title
+                                        td = http.title
+                                    tr
+                                        th Server
+                                        td = http.server
+                                    tr
+                                        th Location
+                                        td = http.location
+                                    tr
+                                        th Robot.txt
+                                        td = http.robots
+                                        td = http.robots_hash
+                                    tr
+                                        th Sitemap
+                                        td = http.sitemap 
+                                        td = http.sitemap_hash
+                                    tr 
+                                        th Security.txt 
+                                        td = http.securitytxt 
+                                        td = http.securitytxt_hash

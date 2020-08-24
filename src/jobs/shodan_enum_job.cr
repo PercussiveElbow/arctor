@@ -1,11 +1,12 @@
 require "./runners/shodan/*"
 
 class ShodanEnumJob < Mosquito::QueuedJob
-    params(scan_id : Int64, host_id : Int64, host : String, scan_type : String)
+    params(scan_id : Int64, host_id : Int64, host : String)
     
     def perform
       puts("ALERT - Recieved Shodan job - #{host}")
       if host
+        scan_type = "passive"
         if scan_type == "passive"
             passive_shodan_scan(host,host_id)
         elsif scan_type == "active"
