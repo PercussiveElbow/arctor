@@ -3,7 +3,7 @@ require "./dns_inserter_runner"
 require "crobat/crobat_sdk"
 require "dns"
 
-class CrobatRunner
+class CrobatRunner < GenericRunner
 
   def initialize(@scan_id : Int64, @domain : String, @domain_id : Int64)
     @dns_inserter = DNSInserter.new(@scan_id, @domain_id)
@@ -11,7 +11,7 @@ class CrobatRunner
 
   def run()
     client = Crobat::CrobatSDK.new("https://sonar.omnisint.io")
-    puts("INFO - DNS Recon - Beginning passive Crobat scan of #{@domain}")
+    self.runner_log_info("DNS Recon - Beginning passive Crobat scan of #{@domain}")
     subdomains = client.retrieve_subdomains(@domain)
     subdomains.each do | subdomain | 
       puts(subdomain)

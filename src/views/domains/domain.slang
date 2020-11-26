@@ -1,78 +1,103 @@
 h1 = domain.fqdn
 
 h3 Analytics
-h6 Statistics
+h5 Statistics
 
 .card
-    table
-        tr 
-            th Unique host count
-            td = unique_hosts.size()
-        tr
-            th Unique subdomain count
-            td = domain.subdomains.size()
-        tr
-            th Known hijackable subdomains 
-            td 0
+    table class="table table-borderless"
+        tbody
+            tr 
+                th Unique host count
+                td = unique_hosts.size()
+            tr
+                th Unique subdomain count
+                td = domain.subdomains.size()
+            tr
+                th Known hijackable subdomains 
+                td 0
+br 
 
-h6 Exposed ports
+h5 Exposed ports
 .card 
     .ct-chart
 
-h6 Geographical Distribution
+br 
+
+
+h5 Geographical Distribution
 .card
     .row
         .col.col-lg-9
             .div.mapcontainer style="height: 400px;width: 100%;"
                 .div id="leafletMap" style="height: 400px;width: 100%;"
         .col.col-lg-3
-            h6 Top Countries by host count
-                table
+            h5 Top Countries by host count
+            table class="table table-borderless" 
+                thead
                     tr 
                         th Country
                         th Count 
-                    - unique_countries.each do | country,count|
-                        tr 
-                            td = country 
-                            td = count
+                tbody
+                - unique_countries.each do | country,count|
+                    tr 
+                        td = country 
+                        td = count
 
-h6 Subdomain host mapping
+br 
+
+
+h5 Subdomain host mapping
 .card
     .row
         div id="cyto" style="width:100%; height:800px;"
 
+br 
+
 .row
     .col.col-lg-6
-        h6 Organisation count
+        h5 Organisation count
         .card
-            table
-                tr
-                    th Organisation name
-                    th Count
+            table class="table table-borderless" 
+                thead
+                    tr
+                        th Organisation name
+                        th Count
+                tbody
                 - unique_orgs.each do | org,count|
                     tr 
                         td = org 
                         td = count
     .col.col-lg-6
-        h6 Other
+        h5 Other
         .card
             table
                 tr
                     th Organisation name
 
+
+br 
+br 
+br
+br 
+br 
+br
+
+
 h3 Subdomains of 
     = domain.fqdn
 
 .card
-    table 
-        tr
-            th Subdomain
-            th Hijackable
-            th A 
-            th AAAA 
-            th MX
-            th NS
-            th Recon source
+    table class="table table-borderless" 
+        thead
+            tr
+                th Subdomain
+                th Hijackable
+                th A 
+                th AAAA 
+                th MX
+                th NS
+                th Recon source
+        tbody
         - subdomains.each do |subdomain|
             tr
             td 
@@ -95,7 +120,8 @@ h3 Subdomains of
                     p -
             td = subdomain.mx
             td = subdomain.ns
-            td = subdomain.source
+            td 
+                span class="badge badge-pill badge-primary" = subdomain.source
 
 javascript:
     window.onload = function() {

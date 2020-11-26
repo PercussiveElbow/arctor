@@ -38,7 +38,7 @@ class ScansController < ApplicationController
             puts("Existing domain #{domain} found in DB")
           end
 
-          puts("INFO - Queueing #{scan_type} DNS enumeration job.")
+          puts("Queueing #{scan_type} DNS enumeration job.")
           if domain_id 
             DNSEnumJob.new(scan_id: this_scan_id, domain: domain, domain_id: domain_id, scan_type: scan_type).enqueue
             scan_created = true

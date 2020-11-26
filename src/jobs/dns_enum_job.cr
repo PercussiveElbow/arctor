@@ -19,7 +19,7 @@ class DNSEnumJob < Mosquito::QueuedJob
         stages = scan.stages
         if stages
           if stages.includes?("pushover")
-            puts("INFO - DNS Recon - Alerting Pushover that scan finished.")
+            puts("DNS Recon - Alerting Pushover that scan finished.")
             AlertRunner.pushover("DNS recon finished for #{domain}")
           end
         end
@@ -27,7 +27,7 @@ class DNSEnumJob < Mosquito::QueuedJob
     end
 
     def passive_dns_scan(domain : String, domain_id : Int64)
-      puts("INFO - DNS Recon - Beginning passive DNS recon of #{domain}")
+      puts("DNS Recon - Beginning passive DNS recon of #{domain}")
       crobat_runner = CrobatRunner.new(scan_id,domain,domain_id)
       crobat_runner.run()
       amass_runner = AmassRunner.new(scan_id, domain,domain_id)
@@ -35,7 +35,7 @@ class DNSEnumJob < Mosquito::QueuedJob
     end
 
     def active_dns_scan(domain : String, domain_id : Int64)
-      puts("INFO - DNS Recon - Beginning active DNS recon of #{domain}")
+      puts("DNS Recon - Beginning active DNS recon of #{domain}")
       amass_runner = AmassRunner.new(scan_id, domain,domain_id)
       amass_runner.run(false)
     end

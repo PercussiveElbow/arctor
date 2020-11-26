@@ -48,6 +48,13 @@ dependencies:
   redis:
     github: stefanwille/crystal-redis
 
+  citrine-i18n:
+    github: amberframework/citrine-i18n
+
+
+  jasper_helpers:
+    github: amberframework/jasper-helpers
+
 development_dependencies:
   garnet_spec:
     github: amberframework/garnet-spec

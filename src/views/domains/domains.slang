@@ -1,8 +1,10 @@
 h1 Domains
-table 
-    tr 
-        th Domains
-        th Subdomain Count
+table class="table table-borderless" 
+    thead
+        tr 
+            th Domains
+            th Subdomain Count
+    tbody
     - domains.each do |domain|
         tr
            td 

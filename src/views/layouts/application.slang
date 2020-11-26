@@ -11,7 +11,12 @@ html
     link rel="icon" type="image/x-icon" href="/favicon.ico"
     
     link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic"
-    link rel="stylesheet" href="/dist/mustard-ui.min.css"
+    / link rel="stylesheet" href="/dist/mustard-ui.min.css"
+    link rel="stylesheet" href="/dist/css/bootstrap.css"
+    link rel="stylesheet" href="/dist/style.css"
+
+
+    script src="/dist/js/bootstrap.bundle.js"
 
     link rel="stylesheet" href="/dist/chartist/chartist.min.css"
     script src="/dist/chartist/chartist.js"
@@ -33,23 +38,19 @@ html
 
 
   body
-    nav
-      div.nav-container
-          div.nav-logo
-            a href="/" alt="Arctor" object-fit="fill" Arctor
-
-          ul.nav-links
+      nav class="navbar navbar-expand-lg navbar-light bg-light"
+          a.navbar-brand href="/" alt="Arctor" object-fit="fill" Arctor
+          ul class="navbar-nav"
             == render(partial: "layouts/_nav.slang")
-          ul.navbar-nav
-              == render(partial: "layouts/_session.slang")
+    == render(partial: "layouts/_session.slang")
 
-    .main 
+    .main
         - flash.each do |key, value|
           div class="alert alert-#{key}" role="alert"
             = flash[key]
 
-        .row
-            .col.col-lg-12 == content
+        .row.justify-content-center
+            .col.col-lg-11 == content
 
     script src="/dist/main.bundle.js"
 

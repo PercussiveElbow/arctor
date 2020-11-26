@@ -26,21 +26,21 @@ class AmassRunner < GenericRunner
     end
 
     def run(passive : Bool)
-      puts("INFO - DNS Recon - Amass - Beginning Amass scan of #{@domain}")
+      self.runner_log_info("DNS Recon - Amass - Beginning Amass scan of #{@domain}")
 
       filename = "/tmp/arctor-#{Random::Secure.hex}.json"
-      puts("INFO - DNS Recon - Amass - Filename #{filename}")
+      self.runner_log_info("DNS Recon - Amass - Filename #{filename}")
       if passive
-        puts("INFO - DNS Recon - Amass - Beginning PASSIVE scan  of #{@domain}")
+        self.runner_log_info("DNS Recon - Amass - Beginning PASSIVE scan  of #{@domain}")
         args = ["enum", "-passive", "-d", "#{@domain}"]
       else
-        puts("INFO - DNS Recon - Amass - Beginning ACTIVE scan  of #{@domain}")
+        self.runner_log_info("DNS Recon - Amass - Beginning ACTIVE scan  of #{@domain}")
         args = ["enum", "-active", "-d", "#{@domain}", "-ip", "-json", "#{filename}"]
       end
       
       status, output = CommandRunner.run("amass", args) 
       if status
-        puts("INFO - DNS Recon - Completed Amass scan of #{@domain}")
+        self.runner_log_info("DNS Recon - Completed Amass scan of #{@domain}")
         puts(output)
 
         if passive
@@ -49,7 +49,7 @@ class AmassRunner < GenericRunner
           parse_file(filename)
         end
       else
-        puts("ERROR - DNS Recon - Failed Amass scan of #{@domain}")
+        self.runner_log_error("DNS Recon - Failed Amass scan of #{@domain}")
         puts(output)
       end
     end
@@ -60,7 +60,7 @@ class AmassRunner < GenericRunner
     end
 
     def parse_file(filename : String)
-      puts("INFO - DNS Recon - Amass - Retrieving from #{filename}")
+      self.runner_log_info("DNS Recon - Amass - Retrieving from #{filename}")
 
       if File.exists?(filename)
         file_content = File.read(filename)
@@ -81,11 +81,11 @@ class AmassRunner < GenericRunner
             ipv4 = ""
             ipv6 = ""
             if ip =~ /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/
-              puts("Found Ipv4 #{ip}")
+              self.runner_log_info("Found Ipv4 #{ip}")
               ipv4 = ip
               @dns_inserter.insert_subdomain_with_host_data(subdomain: parsed_sub.name,ipv4: [ipv4], source: parsed_sub.source)
             elsif ip =~ /(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))/
-              puts("Found Ipv6 #{ip}")
+              self.runner_log_info("Found Ipv6 #{ip}")
               ipv6 = ip
               @dns_inserter.insert_subdomain_with_host_data(subdomain: parsed_sub.name,ipv4: [ipv4], ipv6: [ipv6], source: parsed_sub.source)
             end

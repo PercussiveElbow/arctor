@@ -3,6 +3,7 @@ CREATE TABLE shodan_http_service (
   id BIGSERIAL PRIMARY KEY,
   shodan_service_id BIGSERIAL NOT NULL,
   FOREIGN KEY (shodan_service_id) REFERENCES shodan_services(id),
+  html TEXT,
   html_hash bigint,
   securitytxt VARCHAR,
   securitytxt_hash bigint,
@@ -13,7 +14,7 @@ CREATE TABLE shodan_http_service (
   location VARCHAR,
   server VARCHAR,
   title VARCHAR,
-
+  host VARCHAR,
   created_at TIMESTAMP,
   updated_at TIMESTAMP
 );

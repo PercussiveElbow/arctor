@@ -1,15 +1,15 @@
 - shodan = host.shodan_info
 - if shodan
-    h6 Basic Information
+    h4 Basic Information
     table
         tr 
             th Open ports
-            th 
+            td 
                 ul.tags
                     - ports = shodan.ports
                     - if ports 
-                        - ports.each do | port |
-                            li.tag.tag-green.tag-rounded = port
+                        - ports.sort.each do | port |
+                            span.badge.badge-pill.badge-info = port
 
         tr 
             th Operating System
@@ -63,34 +63,34 @@
         tr
             th Longitude
             td = shodan.longitude
-    h6 Services
-    .row
-        - services = shodan.shodan_services
-        - services.each do | service |
-                .col.col-lg-12
-                    .card 
-                        h6 Port 
-                            = service.port
-                        table 
-                            tr
-                                th Product 
-                                td = service.product 
-                            tr
-                                th Version 
-                                td = service.version 
-                            tr
-                                th CPE
-                                td = service.cpes
-                            tr 
-                                th Banner
-                                td = service.banner 
-                            tr
-                                th OS 
-                                td = service.os
+    br
+    h4 Services
+    .row.justify-content-md-left
+        .container
+            - services = shodan.shodan_services
+            - services.each do | service |
+                    .row.justify-content-md-left
+                        .card
+                            h5 = service.port
+                            table 
+                                tr
+                                    th Product 
+                                    td = service.product 
+                                tr
+                                    th Version 
+                                    td = service.version 
+                                tr
+                                    th CPE
+                                    td = service.cpes
+                                tr 
+                                    th Banner
+                                    td = service.banner 
+                                tr
+                                    th OS 
+                                    td = service.os
                             - http = service.shodan_http_service
-                        - if http 
-                            .card
-                                h6 HTTP Service
+                            - if http 
+                                h5 HTTP Service
                                 table
                                     tr
                                         th Title
@@ -98,6 +98,9 @@
                                     tr
                                         th Server
                                         td = http.server
+                                        tr
+                                        th Host
+                                        td = http.host
                                     tr
                                         th Location
                                         td = http.location
@@ -113,3 +116,6 @@
                                         th Security.txt 
                                         td = http.securitytxt 
                                         td = http.securitytxt_hash
+                                        tr 
+                                        th HTML 
+                                        td = http.html 

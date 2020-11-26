@@ -4,7 +4,7 @@ class ShodanServiceHTTP < Granite::Base
     belongs_to :shodan_service
     column id : Int64, primary: true
 
-    #column html : String?
+    column html : String?
     column html_hash : Int64?
     # securitytxt
     column securitytxt : String?
@@ -21,6 +21,7 @@ class ShodanServiceHTTP < Granite::Base
     # other details
     column server : String?
     column title : String?
+    column host : String?
     #property favicon : HostDataHTTPFavicon? 
 
 

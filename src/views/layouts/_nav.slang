@@ -1,9 +1,9 @@
 - active = context.request.path == "/" ? "active" : ""
-li
-  a href="/domains/" Domains
-li
-  a href="/scans/" Scans
-li 
-  a href="/status/" Status
-li 
-  a href="/settings" Settings
+li.nav-item
+  a.nav-link href="/domains/" Domains
+li.nav-item
+  a.nav-link href="/scans/" Scans
+li.nav-item
+  a.nav-link href="/status/" Status
+li.nav-item
+  a.nav-link href="/settings" Settings

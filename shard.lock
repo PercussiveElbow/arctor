@@ -12,6 +12,10 @@ shards:
     git: https://github.com/amberframework/callback.git
     version: 0.7.1
 
+  citrine-i18n:
+    git: https://github.com/amberframework/citrine-i18n.git
+    version: 0.4.0
+
   cli:
     git: https://github.com/amberframework/cli.git
     version: 0.9.3
@@ -22,7 +26,7 @@ shards:
 
   crobat:
     git: https://github.com/percussiveelbow/crobat-sdk-crystal.git
-    version: 0.1.3+git.commit.edcc3cd11e89d0c5a044f08c2975de5e6f9afe8e
+    version: 1.0.0+git.commit.8596bd3d261f047adf858c5e8ef803992f6efb82
 
   db:
     git: https://github.com/crystal-lang/crystal-db.git
@@ -52,9 +56,21 @@ shards:
     git: https://github.com/amberframework/granite.git
     version: 0.21.1
 
+  habitat:
+    git: https://github.com/luckyframework/habitat.git
+    version: 0.4.4
+
+  i18n:
+    git: https://github.com/TechMagister/i18n.cr.git
+    version: 0.3.1
+
   inflector:
     git: https://github.com/phoffer/inflector.cr.git
     version: 0.1.8
+
+  jasper_helpers:
+    git: https://github.com/amberframework/jasper-helpers.git
+    version: 0.3.0
 
   json_mapping:
     git: https://github.com/crystal-lang/json_mapping.cr.git
@@ -66,7 +82,11 @@ shards:
 
   liquid:
     git: https://github.com/TechMagister/liquid.cr.git
-    version: 0.3.3
+    version: 0.3.4
+
+  markd:
+    git: https://github.com/icyleaf/markd.git
+    version: 0.1.2+git.commit.20962e6cfb4513eb94e6549fd8b735b15d10c6d1
 
   micrate:
     git: https://github.com/amberframework/micrate.git
@@ -74,7 +94,7 @@ shards:
 
   mosquito:
     git: https://github.com/robacarp/mosquito.git
-    version: 0.8.0+git.commit.b38a224fd9c16a11e5f0d7923b8ce950317a2292
+    version: 0.9.0+git.commit.35068a627cbcc7bb969042c87f9e0b0de5cf1158
 
   mysql:
     git: https://github.com/crystal-lang/crystal-mysql.git
@@ -110,7 +130,7 @@ shards:
 
   shodan:
     git: https://github.com/percussiveelbow/ShodanCrystalAPI.git
-    version: 0.1.4+git.commit.9fbdb80826c246f720242c81cb8a3a041db8aa46
+    version: 0.1.7+git.commit.f840c8569de857d598fea88dc85286ff49481983
 
   slang:
     git: https://github.com/jeromegn/slang.git

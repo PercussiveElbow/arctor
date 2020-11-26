@@ -8,15 +8,15 @@ class AquatoneRunner < GenericRunner
     end
 
     def run()
-        puts("INFO - Subdomain Flyover - Aquatone - Beginning Aquatone scan of #{@subdomain}")
+        puts("Subdomain Flyover - Aquatone - Beginning Aquatone scan of #{@subdomain}")
 
         dirname = "/tmp/arctor-#{Random::Secure.hex}"
-        puts("INFO - Subdomain Flyover - Aquatone - Directory #{dirname}")
+        puts("Subdomain Flyover - Aquatone - Directory #{dirname}")
         args = ["-out", "#{dirname}", "--chrome-path", "/usr/bin/google-chrome"]
         
         status, output = CommandRunner.run("/bin/aquatone", args, @subdomain) #CHANGEME
         if status
-            puts("INFO - Subdomain Takeover - Aquatone - Completed Aquatone scan of #{@subdomain}")
+            puts("Subdomain Takeover - Aquatone - Completed Aquatone scan of #{@subdomain}")
             puts(output)
 
             if Dir.exists?(dirname)
@@ -26,7 +26,7 @@ class AquatoneRunner < GenericRunner
                 end
             end
         else
-          puts("ERROR - Subdomain Takeover - Aquatone - Failed Aquatone scan of #{@subdomain}")
+            self.runner_log_error("Subdomain Takeover - Aquatone - Failed Aquatone scan of #{@subdomain}")
         end
     end
 end

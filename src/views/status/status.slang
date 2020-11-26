@@ -14,3 +14,15 @@ table
             tr
                 td = pending
 
+br
+br
+
+h3 Logs
+h4 Error Logs
+    pre
+        code = error_logs 
+
+h4 Informational Logs
+    pre
+        code = info_logs
+

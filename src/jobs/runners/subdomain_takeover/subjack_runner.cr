@@ -8,30 +8,30 @@ class SubJackRunner < GenericRunner
     end
 
     def run()
-        puts("INFO - Subdomain Takeover - Subjack - Beginning Subjack scan of #{@subdomain}")
+        self.runner_log_info("Subdomain Takeover - Subjack - Beginning Subjack scan of #{@subdomain}")
 
         filename = "/tmp/arctor-#{Random::Secure.hex}.json"
-        puts("INFO - Subdomain Takeover - Subjack - Filename #{filename}")
+        self.runner_log_info("Subdomain Takeover - Subjack - Filename #{filename}")
         args = ["-d", "#{@subdomain}", "-o", "#{filename}"]
         
         status, output = CommandRunner.run("/home/am/go/bin/subjack", args) #CHANGEME
         if status
-            puts("INFO - Subdomain Takeover - Subjack - Completed Subjack scan of #{@subdomain}")
+            self.runner_log_info("Subdomain Takeover - Subjack - Completed Subjack scan of #{@subdomain}")
             puts(output)
             parse_file(filename)
         else
-          puts("ERROR - Subdomain Takeover - Subjack - Failed Subjack scan of #{@subdomain}")
+            self.runner_log_error("Subdomain Takeover - Subjack - Failed Subjack scan of #{@subdomain}")
         end
     end
 
     def parse_file(filename : String)
-        puts("INFO - Subdomain Takeover - Subjack - Retrieving from #{filename}")
+        self.runner_log_info("Subdomain Takeover - Subjack - Retrieving from #{filename}")
   
         if File.exists?(filename)
           file_content = File.read(filename)
           puts(file_content)
         else
-            puts("INFO - No subjack data found for #{@subdomain} at #{filename}")
+            self.runner_log_info("No subjack data found for #{@subdomain} at #{filename}")
         end
     end
 end

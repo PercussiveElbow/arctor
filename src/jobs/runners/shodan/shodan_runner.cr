@@ -6,19 +6,29 @@ class ShodanRunner < GenericRunner
     end
 
     def run(passive : Bool)
-      puts("INFO - Shodan - Beginning Shodan recon of #{@host}")
-      shodan_api = Shodan::Client.new("aaaaaaaaaaaaaaaaaaaaaaaaaaaa") #CHANGEME
+      self.runner_log_info("Shodan - Beginning Shodan recon of #{@host}")
+      settings = Settings.first
 
-      begin
-        host_info = shodan_api.host(@host)
-        if host_info
-          insert_host_data(host_info)
+      if settings
+        shodan_key = settings.shodan_key
+        if shodan_key 
+          shodan_api = Shodan::Client.new(shodan_key)
+
+          begin
+            host_info = shodan_api.host(@host)
+            if host_info
+              insert_host_data(host_info)
+            end
+          rescue ex : Shodan::ShodanHostNotfoundException
+            puts(ex)
+          rescue ex : Shodan::ShodanAPIException
+            puts(ex)
+          end      
         end
-      rescue ex : Shodan::ShodanHostNotfoundException
-        puts(ex)
-      rescue ex : Shodan::ShodanAPIException
-        puts(ex)
-      end      
+      else
+        raise Exception.new("No Shodan key supplied.")
+      end
+
     
     end
 
@@ -32,7 +42,7 @@ class ShodanRunner < GenericRunner
       area_code: host_info.area_code, region_code: host_info.region_code, postal_code: host_info.postal_code,
       city: host_info.city, country_name: host_info.country_name, dma_code: host_info.dma_code, longitude: host_info.longitude,
       latitude: host_info.latitude, hostnames:  host_info.hostnames, domains: host_info.domains)
-      puts("INFO - Shodan  - Inserting Shodan Info into DB #{new_shodan_entry}")
+      self.runner_log_info("Shodan  - Inserting Shodan Info into DB #{new_shodan_entry}")
 
       new_shodan_entry_id = new_shodan_entry.id 
       datas = host_info.data
@@ -41,18 +51,18 @@ class ShodanRunner < GenericRunner
           service = ShodanService.create!(shodan_info_id: new_shodan_entry_id, port: data.port, 
           product: data.product, isp: data.isp, asn: data.asn, hostnames: data.hostnames, 
           domains: data.domains, os: data.os, hash: data.hash, version: data.version, cpes: data.cpe)
-          puts("INFO - Shodan  - Inserting Shodan service into DB #{service}")
+          self.runner_log_info("Shodan  - Inserting Shodan service into DB #{service}")
 
           http = data.http
 
           if service && http
             service_id = service.id
             if service_id
-              http_service = ShodanServiceHTTP.create!(shodan_service_id: service_id, html_hash: http.html_hash,
+              http_service = ShodanServiceHTTP.create!(shodan_service_id: service_id, html: http.html, html_hash: http.html_hash,
               securitytxt: http.securitytxt, securitytxt_hash: http.securitytxt_hash,
               robots: http.robots, robots_hash: http.robots_hash, sitemap: http.sitemap, 
-              sitemap_hash: http.sitemap_hash, location: http.location, server: http.server, title: http.title)
-              puts("INFO - Shodan  - Inserting Shodan HTTP service into DB #{http_service}")
+              sitemap_hash: http.sitemap_hash, location: http.location, server: http.server, title: http.title, host: http.host)
+              self.runner_log_info("Shodan  - Inserting Shodan HTTP service into DB #{http_service}")
             end
           end
         end

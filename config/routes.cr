@@ -36,6 +36,7 @@ Amber::Server.configure do
     get "/domains/:domain/subdomain/:subdomain", SubDomainsController, :get
     get "/status/", StatusController, :index
     get "/settings/", SettingsController, :index
+    post "/settings/", SettingsController, :save
 
   end
 

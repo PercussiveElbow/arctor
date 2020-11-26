@@ -1,7 +1,7 @@
 require "../../subdomain_takeover_job" 
 require "../../subdomain_flyover_job" 
 
-class DNSInserter
+class DNSInserter < GenericRunner
 
 
     def initialize(@scan_id : Int64, @domain_id : Int64)
@@ -21,16 +21,30 @@ class DNSInserter
                 existing_host = ipv4 ? Host.find_by(ipv4: ip) : Host.find_by(ipv6: ip)
                 if existing_host
                     link = SubDomainHostLink.create(host_id: existing_host.id, sub_domain_id: subdomain_id)
-                    puts("INFO - DNS Recon - Host #{ip.to_s} already present in DB. Linked.")
+                    self.runner_log_info("DNS Recon - Host #{ip.to_s} already present in DB. Linked.")
                 else
                     host = Host.create(ipv4: ip)
-                    puts("INFO - DNS Recon - Created host #{host.id.to_s} with IP #{ip.to_s} in database")
+                    self.runner_log_info("DNS Recon - Created host #{host.id.to_s} with IP #{ip.to_s} in database")
                     host_id = host.id if host
                     self.start_relevant_host_scans(ip,host_id) if host_id
                     link = SubDomainHostLink.create(host_id: host_id, sub_domain_id: subdomain_id)
                 end        
             end            
         end
+    end
+
+
+    def valid_ip4?(ip : String)
+        return ip.match(/^((25[0-5]|(2[0-4]|1[0-9]|[1-9]|)[0-9])(\.(?!$)|$)){4}$/)
+    end
+
+    def not_private_ip?(ip : String)
+        return !ip.match(/(^127\.)|(^192\.168\.)|(^10\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^::1$)|(^[fF][cCdD])/)
+    end
+
+
+    def valid_ipv6?(ip : String)
+        1 # stub
     end
 
     def insert_subdomain_if_not_already_exists(subdomain : String, ipv4 : Array(String) = [] of String, ipv6 : Array(String) = [] of String, source : String = "")
@@ -59,7 +73,7 @@ class DNSInserter
                 subdomain_id = subdomain_obj.id
                 self.start_relevant_subdomain_scans(subdomain, subdomain_id) if subdomain_id
             end
-            puts("INFO - DNS Recon - Loaded subdomain #{subdomain} into database")
+            self.runner_log_info("DNS Recon - Loaded subdomain #{subdomain} into database")
             if subdomain_obj
                 return subdomain_obj.id
             end
@@ -73,10 +87,12 @@ class DNSInserter
     
         subdomains.each do | subdomain |
           begin
-            puts("INFO - DNS Recon - Resolving #{subdomain}")
+            self.runner_log_info("DNS Recon - Resolving #{subdomain}")
             response = resolver.query(subdomain, DNS::RecordType::A)
             response.answers.each do |answer|
-              self.insert_subdomain_with_host_data(subdomain: subdomain, ipv4: [answer.data.to_s],source: source)
+                if valid_ip4?(answer.data.to_s) && not_private_ip?(answer.data.to_s)
+                    self.insert_subdomain_with_host_data(subdomain: subdomain, ipv4: [answer.data.to_s],source: source)
+                end
             end
             response = resolver.query(subdomain, DNS::RecordType::AAAA)
             response.answers.each do |answer|
@@ -98,7 +114,7 @@ class DNSInserter
         if scan
             stages = scan.stages
             if stages && stages.includes?("shodan")
-                puts("INFO - DNS Recon - Queueing Shodan recon for #{host_ip}")
+                self.runner_log_info("DNS Recon - Queueing Shodan recon for #{host_ip}")
                 ShodanEnumJob.new(scan_id: @scan_id, host: host_ip, host_id: host_id).enqueue
             end
         end
@@ -110,11 +126,11 @@ class DNSInserter
             stages = scan.stages
             if stages
                 if stages.includes?("subjack")
-                    puts("INFO - DNS Recon - Queueing Subdomain Takeover job for #{subdomain}")
+                    self.runner_log_info("DNS Recon - Queueing Subdomain Takeover job for #{subdomain}")
                     SubDomainTakeoverJob.new(@scan_id, subdomain, subdomain_id).enqueue
                 end
                 if stages.includes?("flyover")
-                    puts("INFO - DNS Recon - Queueing Subdomain Flyover job for #{subdomain}")
+                    self.runner_log_info("DNS Recon - Queueing Subdomain Flyover job for #{subdomain}")
                     SubDomainFlyoverJob.new(@scan_id, subdomain, subdomain_id).enqueue
                 end
             end
