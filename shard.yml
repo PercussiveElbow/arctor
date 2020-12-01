@@ -55,6 +55,10 @@ dependencies:
   jasper_helpers:
     github: amberframework/jasper-helpers
 
+  marionette:
+    github: watzon/marionette
+    branch: master
+
 development_dependencies:
   garnet_spec:
     github: amberframework/garnet-spec

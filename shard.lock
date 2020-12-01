@@ -84,6 +84,10 @@ shards:
     git: https://github.com/TechMagister/liquid.cr.git
     version: 0.3.4
 
+  marionette:
+    git: https://github.com/watzon/marionette.git
+    version: 0.2.0+git.commit.75a1f2e225b1b8296d5eb12ac2928a740dff8a57
+
   markd:
     git: https://github.com/icyleaf/markd.git
     version: 0.1.2+git.commit.20962e6cfb4513eb94e6549fd8b735b15d10c6d1

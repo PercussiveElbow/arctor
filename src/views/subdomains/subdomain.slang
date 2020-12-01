@@ -1,7 +1,7 @@
 
 div.row
     div.col.col-lg-12
-        h1 Hosts of 
+        h1 Subdomain
             = subdomain.fqdn
 
 div.row
@@ -16,6 +16,11 @@ div.row
                         li.a href="" = host.ipv6
 
     .col.col-lg-10
+        h3 Screenshots
+        - screenshots.each do | screenshot |
+            h4 =="Port #{screenshot.port.to_s}"
+            img src=="data:image/jpeg;base64, #{screenshot.image}"
+
         - hosts.each do | host|
             h3 = host.ipv4
 

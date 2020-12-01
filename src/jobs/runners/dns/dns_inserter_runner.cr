@@ -1,8 +1,8 @@
 require "../../subdomain_takeover_job" 
 require "../../subdomain_flyover_job" 
+require "../generic_runner"
 
 class DNSInserter < GenericRunner
-
 
     def initialize(@scan_id : Int64, @domain_id : Int64)
     end
@@ -113,9 +113,24 @@ class DNSInserter < GenericRunner
         scan = Scan.find(@scan_id)
         if scan
             stages = scan.stages
-            if stages && stages.includes?("shodan")
-                self.runner_log_info("DNS Recon - Queueing Shodan recon for #{host_ip}")
-                ShodanEnumJob.new(scan_id: @scan_id, host: host_ip, host_id: host_id).enqueue
+            if stages
+                if stages.includes?("shodan")
+                    self.runner_log_info("DNS Recon - Queueing Shodan recon for #{host_ip}")
+                    ShodanEnumJob.new(scan_id: @scan_id, host: host_ip, host_id: host_id).enqueue
+                end
+            end
+        end
+    end
+
+    def start_relevant_subdomain_scans(subdomain : String, subdomain_id : Int64)
+        scan = Scan.find(@scan_id)
+        if scan 
+            stages = scan.stages 
+            if stages 
+                if stages.includes?("flyover")
+                        self.runner_log_info("DNS Recon - Queueing flyover recon for subdomain #{host_ip}")
+                        SubDomainFlyoverJob.new(scan_id: @scan_id, subdomain: subdomain, subdomain_id: subdomain_id).enqueue
+                end
             end
         end
     end

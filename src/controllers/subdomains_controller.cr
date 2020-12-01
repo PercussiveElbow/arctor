@@ -7,8 +7,7 @@ class SubDomainsController < ApplicationController
         subdomain = SubDomain.find_by(domain_id: domain.id,fqdn: params[:subdomain])
         if subdomain
           hosts = subdomain.hosts
-
-
+          screenshots = Screenshot.all("WHERE subdomain_id=?", [subdomain.id])
           render("subdomain.slang")
         end
       end

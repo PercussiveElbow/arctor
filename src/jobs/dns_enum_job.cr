@@ -1,5 +1,6 @@
 require "./runners/dns/*"
 require "./runners/utils/*"
+require "./runners/generic_runner"
 
 class DNSEnumJob < Mosquito::QueuedJob
     params(scan_id : Int64, domain_id : Int64, domain : String, scan_type : String)
