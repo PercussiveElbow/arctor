@@ -2,6 +2,8 @@
 
 [![Amber Framework](https://img.shields.io/badge/using-amber_framework-orange.svg)](https://amberframework.org)
 
+### WIP DON'T USE :((((((
+
 Arctor is a recon suite designed to provide easy to use oversight of a domain's presence on the web. To achieve this a combination of OSINT resources (Shodan, Crobat API), automated reconaissance modules written in Crystal and parsers for existing security tooling.  
 
 ## Features
@@ -20,7 +22,7 @@ Worker agents are used to handle the recon jobs in the background. These agents 
 
 
 #### Manual 
-This project requires [Crystal](https://crystal-lang.org/) ([installation guide](https://crystal-lang.org/docs/installation/)).
+This project requires [Crystal 0.36](https://crystal-lang.org/) ([installation guide](https://crystal-lang.org/docs/installation/)).
 
 Install Crystal, Redis, Amber and Postgres.
 Create a DB for Postgres
