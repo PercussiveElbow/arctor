@@ -2,11 +2,11 @@ version: 2.0
 shards:
   amber:
     git: https://github.com/amberframework/amber.git
-    version: 0.35.0
+    version: 0.36.0
 
   amber_router:
     git: https://github.com/amberframework/amber-router.git
-    version: 0.3.0
+    version: 0.4.4
 
   callback:
     git: https://github.com/amberframework/callback.git
@@ -30,7 +30,7 @@ shards:
 
   db:
     git: https://github.com/crystal-lang/crystal-db.git
-    version: 0.9.0
+    version: 0.10.1
 
   dns:
     git: https://gitlab.com/jgillich/crystal-dns.git
@@ -38,7 +38,7 @@ shards:
 
   email:
     git: https://github.com/arcage/crystal-email.git
-    version: 0.6.2
+    version: 0.6.3
 
   exception_page:
     git: https://github.com/crystal-loot/exception_page.git
@@ -54,11 +54,11 @@ shards:
 
   granite:
     git: https://github.com/amberframework/granite.git
-    version: 0.21.1
+    version: 0.22.1
 
   habitat:
     git: https://github.com/luckyframework/habitat.git
-    version: 0.4.4
+    version: 0.4.7
 
   i18n:
     git: https://github.com/TechMagister/i18n.cr.git
@@ -78,7 +78,7 @@ shards:
 
   kilt:
     git: https://github.com/jeromegn/kilt.git
-    version: 0.6.0
+    version: 0.6.1
 
   liquid:
     git: https://github.com/TechMagister/liquid.cr.git
@@ -94,15 +94,15 @@ shards:
 
   micrate:
     git: https://github.com/amberframework/micrate.git
-    version: 0.8.0
+    version: 0.10.0
 
   mosquito:
     git: https://github.com/robacarp/mosquito.git
-    version: 0.9.0+git.commit.35068a627cbcc7bb969042c87f9e0b0de5cf1158
+    version: 0.10.0+git.commit.df3e0ad67d5724f52960b6f40b7335e7f2a257ca
 
   mysql:
     git: https://github.com/crystal-lang/crystal-mysql.git
-    version: 0.11.2
+    version: 0.13.0
 
   optarg:
     git: https://github.com/amberframework/optarg.git
@@ -110,7 +110,7 @@ shards:
 
   pg:
     git: https://github.com/will/crystal-pg.git
-    version: 0.21.1
+    version: 0.23.2
 
   pool:
     git: https://github.com/ysbaddaden/pool.git
@@ -138,11 +138,11 @@ shards:
 
   slang:
     git: https://github.com/jeromegn/slang.git
-    version: 1.7.1
+    version: 1.7.2
 
   sqlite3:
     git: https://github.com/crystal-lang/crystal-sqlite3.git
-    version: 0.16.0
+    version: 0.18.0
 
   string_inflection:
     git: https://github.com/mosop/string_inflection.git

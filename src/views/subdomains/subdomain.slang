@@ -16,15 +16,17 @@ div.row
                         li.a href="" = host.ipv6
 
     .col.col-lg-10
-        h3 Screenshots
-        - screenshots.each do | screenshot |
-            h4 =="Port #{screenshot.port.to_s}"
-            img src=="data:image/jpeg;base64, #{screenshot.image}"
+        == render(partial: "screenshot.slang")
 
         - hosts.each do | host|
             h3 = host.ipv4
 
             div.col.col-lg-6.float-right
-            img src="/dist/images/shodan.png"
             div id=host.ipv4
                 == render(partial: "shodan.slang")
+                h4 Port Scan Results (TCP)
+                == render(partial: "portscan.slang")
+            br
+            br
+            br
+            br

@@ -1,5 +1,6 @@
 require "../../subdomain_takeover_job" 
 require "../../subdomain_flyover_job" 
+require "../../portscan_job" 
 require "../generic_runner"
 
 class DNSInserter < GenericRunner
@@ -117,6 +118,12 @@ class DNSInserter < GenericRunner
                 if stages.includes?("shodan")
                     self.runner_log_info("DNS Recon - Queueing Shodan recon for #{host_ip}")
                     ShodanEnumJob.new(scan_id: @scan_id, host: host_ip, host_id: host_id).enqueue
+                end
+                if stages.includes?("portscan")
+                    self.runner_log_info("DNS Recon - Queueing port scan for #{host_ip}")
+                    PortScanJob.new(scan_id: @scan_id, host: host_ip, host_id: host_id).enqueue
+                else
+                    puts("Not port scanning")
                 end
             end
         end

@@ -1,5 +1,6 @@
 - shodan = host.shodan_info
 - if shodan
+    img src="/dist/images/shodan.png"
     h4 Basic Information
     table
         tr 
@@ -119,3 +120,5 @@
                                         tr 
                                         th HTML 
                                         td = http.html 
+    br
+    br
