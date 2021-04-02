@@ -12,8 +12,8 @@ jobs:
     - name: Install dependencies
       run: shards install
     - name: Build
-      run: crystal build -Dpreview_mt --error-trace --release src/arctor.cr
+      run: crystal build --error-trace --release src/arctor.cr
       id: build_main
     - name: Build Worker
-      run: crystal build -Dpreview_mt --error-trace --release src/arctor_worker.cr
+      run: crystal build --error-trace --release src/arctor_worker.cr
       id: build_worker
