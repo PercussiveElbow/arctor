@@ -1,16 +1,17 @@
 version: '2'
 
 services:
-  app:
+  arctor:
     build: .
     image: arctor
     command: amber watch
     environment:
-      DATABASE_URL: postgres://admin:password@db:5432/arctor_development
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/arctor_development
     ports:
       - 3000:3000
     links:
-      - db
+      - postgres
+      - redis
     volumes:
     - .:/app
     - nodes:/app/node_modules
@@ -19,24 +20,49 @@ services:
   migrate:
     build: .
     image: arctor
-    command: bash -c 'while ! nc -q 1 db 5432 </dev/null; do sleep 1; done && amber db migrate seed'
+    command: bash -c 'while ! nc -q 1 postgres 5432 </dev/null; do sleep 1; done && amber db migrate seed'
     environment:
-      DATABASE_URL: postgres://admin:password@db:5432/arctor_development
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/arctor_development
     volumes:
       - .:/app
     links:
-      - db
+      - postgres
 
-  db:
+  postgres:
     image: postgres
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
       POSTGRES_DB: arctor_development
     volumes:
-      - db:/var/lib/postgres/data
+      - postgresdb:/var/lib/postgres/data
+      
+  redis:
+    image: 'docker.io/bitnami/redis:6.2-debian-10'
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    volumes:
+      - 'redis_data:/bitnami/redis/data'
+      
+  worker:
+    build: .
+    image: arctor
+    command: crystal run src/arctor_worker.cr
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/arctor_development
+    links:
+      - postgres
+      - redis
+    volumes:
+    - .:/app
+    - nodes:/app/node_modules
+    - shards:/app/lib
 
 volumes:
-  db:
+  postgresdb:
   nodes:
   shards:
+  redis_data:
+    driver: local

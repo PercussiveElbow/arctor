@@ -20,8 +20,8 @@ port_reuse: true
 process_count: 1
 # ssl_key_file:
 # ssl_cert_file:
-redis_url: "redis://localhost:6379"
-database_url: "postgres://postgres:postgres@127.0.0.1:5432/arctor_development"
+redis_url: "redis://redis:6379"
+database_url: "postgres://postgres:postgres@postgres:5432/arctor_development"
 auto_reload: true
 
 session:

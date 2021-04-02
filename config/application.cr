@@ -25,5 +25,5 @@ require "../src/controllers/**"
 require "./routes"
 
 Mosquito.configure do |settings|
-    settings.redis_url = (ENV["REDIS_TLS_URL"]? || ENV["REDIS_URL"]? || "redis://localhost:6379")
+    settings.redis_url = (ENV["REDIS_TLS_URL"]? || ENV["REDIS_URL"]? || "redis://redis:6379")
 end
